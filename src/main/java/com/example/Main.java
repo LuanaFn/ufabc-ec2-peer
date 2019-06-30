@@ -45,7 +45,8 @@ public class Main {
   private DataSource dataSource;
 
   public static void main(String[] args) throws Exception {
-    SpringApplication.run(Main.class, args);
+    //SpringApplication.run(Main.class, args);
+	  System.out.println("teste");
   }
 
   @RequestMapping("/")
