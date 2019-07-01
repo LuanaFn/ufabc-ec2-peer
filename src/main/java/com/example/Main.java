@@ -18,9 +18,20 @@ package com.example;
 
 public class Main {
 
-  public static void main(String[] args) throws Exception {
-    //SpringApplication.run(Main.class, args);
-	  System.out.println("teste");
-  }
+	public static void main(String[] args) throws Exception {
+		// SpringApplication.run(Main.class, args);
+		System.out.println("teste");
+		
+		Client client;
+		Server server;
+
+		server = new Server();
+		client = new Client(); 
+		
+		server.start();
+
+		client.sendEcho("hello server");
+		client.sendEcho("server is working");
+	}
 
 }
