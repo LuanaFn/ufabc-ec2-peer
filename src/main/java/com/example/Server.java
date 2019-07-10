@@ -17,7 +17,7 @@ public class Server extends Thread {
 		try {
 			socket = new DatagramSocket(port);
 			//socket.bind(new InetSocketAddress(host, port));
-			socket.connect(new InetSocketAddress(InetAddress.getByName(host), 80));
+			//socket.connect(new InetSocketAddress(InetAddress.getByName(host), 80));
 			
 			System.out.println("Servidor iniciado na porta "+port);
 			System.out.println("Servidor isBound: "+Boolean.toString(socket.isBound()));
@@ -25,7 +25,7 @@ public class Server extends Thread {
 			System.out.println("Port: "+ socket.getPort());
 			System.out.println("Host local: "+ socket.getLocalAddress());
 			System.out.println("Host: "+ socket.getInetAddress());
-		} catch (SocketException | UnknownHostException e) {
+		} catch (SocketException e) {
 			e.printStackTrace();
 		}
 	}
