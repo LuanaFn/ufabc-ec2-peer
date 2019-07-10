@@ -14,6 +14,8 @@ public class Server extends Thread {
 	public Server(int port) {
 		try {
 			socket = new DatagramSocket(port);
+			
+			System.out.println("Servidor iniciado na porta "+port);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
