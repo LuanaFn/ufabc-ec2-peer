@@ -6,6 +6,7 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 public class Server extends Thread {
 	private DatagramSocket socket;
@@ -14,11 +15,17 @@ public class Server extends Thread {
 
 	public Server(String host, int port) {
 		try {
-			socket = new DatagramSocket(new InetSocketAddress(host, port));
+			socket = new DatagramSocket(port);
 			//socket.bind(new InetSocketAddress(host, port));
+			socket.connect(new InetSocketAddress(InetAddress.getByName(host), port));
 			
 			System.out.println("Servidor iniciado na porta "+port);
-		} catch (SocketException e) {
+			System.out.println("Servidor isBound: "+Boolean.toString(socket.isBound()));
+			System.out.println("Local port: "+ socket.getLocalPort());
+			System.out.println("Port: "+ socket.getPort());
+			System.out.println("Host local: "+ socket.getLocalAddress());
+			System.out.println("Host: "+ socket.getInetAddress());
+		} catch (SocketException | UnknownHostException e) {
 			e.printStackTrace();
 		}
 	}
