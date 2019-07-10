@@ -1,1 +1,1 @@
-web: java $JAVA_OPTS -jar target/java-getting-started-1.0.jar ufabc-ec1-peer.herokuapp.com $PORT
+web: target/universal/stage/bin/play-ws-test -Dhttp.port=${PORT} -Dconfig.file=conf/application.conf
