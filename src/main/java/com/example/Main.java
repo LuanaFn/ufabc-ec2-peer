@@ -17,7 +17,8 @@
 package com.example;
 
 import java.io.File;
-import java.sql.ResultSet;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 public class Main {
 
@@ -41,20 +42,21 @@ public class Main {
 		client.sendEcho("hello server");
 		client.sendEcho("server is working");
 
-//		Sql t = new Sql();
-//		LeArquivos le = new LeArquivos();
-//		
-//		le.le();
-//		t.executaInsert("INSERT INTO lista (peer,time) VALUES ('teste','2019-07-09 15:00:00')");
-//		 ResultSet rs = t.executaSelect("SELECT * FROM `lista` WHERE peer = \"teste\" ORDER BY time DESC");
-//		 rs.next();
-//		 int id = rs.getInt("id");
-//		 File[] arquivos = le.listaArquivos();
-//		 for (int i = 0; i < arquivos.length; i++) {
-//			 System.out.println("INSERT INTO `item`( `data`, `lista_id`) VALUES ("+arquivos[i].toString()+","+id+")");
-//			t.executaInsert( "INSERT INTO `item`( `data`, `lista_id`) VALUES ('"+arquivos[i].toString()+"',"+id+")");
-//			}
 		 
+		LeArquivos le = new LeArquivos();
+		Arquivo g = new Arquivo("/teste/data.txt");
+		
+		Calendar cal = Calendar.getInstance();
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
+		String data = sdf.format(cal.getTime());
+		
+		le.le();
+		File[] arquivos = le.listaArquivos();
+		for (int i = 0; i < arquivos.length; i++) {
+			System.out.println(arquivos[i]);  			 
+			g.grava("peer:nome_do_peer;metadados_do_arquivo:"+arquivos[i]+"hora_da_gravacao:"+data+"\n");
+			
+		}
 	}
 
 }
