@@ -14,7 +14,7 @@ public class Server extends Thread {
 
 	public Server(String host, int port) {
 		try {
-			socket = new DatagramSocket();
+			socket = new DatagramSocket(null);
 			socket.bind(new InetSocketAddress(host, port));
 			
 			System.out.println("Servidor iniciado na porta "+port);
