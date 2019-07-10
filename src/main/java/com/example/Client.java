@@ -9,13 +9,15 @@ import java.net.UnknownHostException;
 public class Client {
 	private DatagramSocket socket;
 	private InetAddress address;
+	private int porta;
 
 	private byte[] buf;
 
-	public Client(String host) {
+	public Client(String host, int porta) {
 		try {
 			socket = new DatagramSocket();
 			address = InetAddress.getByName(host);
+			this.porta = porta;
 
 		} catch (SocketException | UnknownHostException e) {
 			// TODO Auto-generated catch block
@@ -26,7 +28,7 @@ public class Client {
 	public String sendEcho(String msg) {
 		try {
 			buf = msg.getBytes();
-			DatagramPacket packet = new DatagramPacket(buf, buf.length, address, 4445);
+			DatagramPacket packet = new DatagramPacket(buf, buf.length, address, porta);
 			socket.send(packet);
 			
 			System.out.println("Client: enviou a string: "+msg);

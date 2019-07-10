@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.InetSocketAddress;
 import java.net.SocketException;
 
 public class Server extends Thread {
@@ -11,9 +12,10 @@ public class Server extends Thread {
 	private boolean running;
 	private byte[] buf = new byte[256];
 
-	public Server(int port) {
+	public Server(String host, int port) {
 		try {
-			socket = new DatagramSocket(port);
+			socket = new DatagramSocket();
+			socket.bind(new InetSocketAddress(host, port));
 			
 			System.out.println("Servidor iniciado na porta "+port);
 		} catch (SocketException e) {

@@ -33,8 +33,8 @@ public class Main {
 		Client client;
 		Server server;
 
-		server = new Server(porta);
-		client = new Client(host); 
+		server = new Server(host, porta);
+		client = new Client(host, porta); 
 		
 		server.start();
 
