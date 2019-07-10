@@ -26,13 +26,15 @@ public class Main {
 		if(args.length < 2)
 			throw new RuntimeException("O host e porta da aplicação deve ser passados como argumento");
 		
-		System.out.println("Porta escolhida para rodar a app: "+args[0]);
+		String host = args[0];
+		int porta = Integer.valueOf(args[1]);
+		System.out.println("O app vai começar a rodar com o host "+host+" e a porta "+porta);
 		
 		Client client;
 		Server server;
 
-		server = new Server(Integer.valueOf(args[1]));
-		client = new Client(args[0]); 
+		server = new Server(porta);
+		client = new Client(host); 
 		
 		server.start();
 
