@@ -19,19 +19,23 @@ package com.example;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-		// SpringApplication.run(Main.class, args);
-		System.out.println("teste");
+	
+		if(args.length < 2)
+			throw new RuntimeException("O host e porta da aplicação deve ser passados como argumento");
+		
+		System.out.println("Porta escolhida para rodar a app: "+args[0]);
 		
 		Client client;
 		Server server;
 
-		server = new Server();
-		client = new Client(); 
+		server = new Server(Integer.valueOf(args[1]));
+		client = new Client(args[0]); 
 		
 		server.start();
 
 		client.sendEcho("hello server");
 		client.sendEcho("server is working");
+		
 	}
 
 }
