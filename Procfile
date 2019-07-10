@@ -1,1 +1,1 @@
-web: java -jar target/java-getting-started-1.0.jar ufabc-ec1-peer.herokuapp.com $PORT
+web: java -Dserver.port=$PORT $JAVA_OPTS -jar target/java-getting-started-1.0.jar ufabc-ec1-peer.herokuapp.com $PORT
