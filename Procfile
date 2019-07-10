@@ -1,1 +1,1 @@
-worker: java $JAVA_OPTS -jar target/java-getting-started-1.0.jar ufabc-ec1-peer.herokuapp.com 8080
+web: java $JAVA_OPTS -jar target/java-getting-started-1.0.jar ufabc-ec1-peer.herokuapp.com 8080
