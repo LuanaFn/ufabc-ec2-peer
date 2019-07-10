@@ -17,7 +17,7 @@ public class Server extends Thread {
 		try {
 			socket = new DatagramSocket(port);
 			//socket.bind(new InetSocketAddress(host, port));
-			socket.connect(new InetSocketAddress(InetAddress.getByName(host), port));
+			socket.connect(new InetSocketAddress(InetAddress.getByName(host), 80));
 			
 			System.out.println("Servidor iniciado na porta "+port);
 			System.out.println("Servidor isBound: "+Boolean.toString(socket.isBound()));
