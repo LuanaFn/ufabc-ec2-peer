@@ -11,9 +11,11 @@ public class Server extends Thread {
 	private boolean running;
 	private byte[] buf = new byte[256];
 
-	public Server() {
+	public Server(int port) {
 		try {
-			socket = new DatagramSocket(4445);
+			socket = new DatagramSocket(port);
+			
+			System.out.println("Servidor iniciado na porta "+port);
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}

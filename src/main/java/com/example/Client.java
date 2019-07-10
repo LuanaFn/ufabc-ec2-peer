@@ -12,10 +12,10 @@ public class Client {
 
 	private byte[] buf;
 
-	public Client() {
+	public Client(String host) {
 		try {
 			socket = new DatagramSocket();
-			address = InetAddress.getByName("localhost");
+			address = InetAddress.getByName(host);
 
 		} catch (SocketException | UnknownHostException e) {
 			// TODO Auto-generated catch block
