@@ -16,6 +16,9 @@
 
 package com.example;
 
+import java.io.File;
+import java.sql.ResultSet;
+
 public class Main {
 
 	public static void main(String[] args) throws Exception {
@@ -35,7 +38,21 @@ public class Main {
 
 		client.sendEcho("hello server");
 		client.sendEcho("server is working");
-		
+
+//		Sql t = new Sql();
+//		LeArquivos le = new LeArquivos();
+//		
+//		le.le();
+//		t.executaInsert("INSERT INTO lista (peer,time) VALUES ('teste','2019-07-09 15:00:00')");
+//		 ResultSet rs = t.executaSelect("SELECT * FROM `lista` WHERE peer = \"teste\" ORDER BY time DESC");
+//		 rs.next();
+//		 int id = rs.getInt("id");
+//		 File[] arquivos = le.listaArquivos();
+//		 for (int i = 0; i < arquivos.length; i++) {
+//			 System.out.println("INSERT INTO `item`( `data`, `lista_id`) VALUES ("+arquivos[i].toString()+","+id+")");
+//			t.executaInsert( "INSERT INTO `item`( `data`, `lista_id`) VALUES ('"+arquivos[i].toString()+"',"+id+")");
+//			}
+		 
 	}
 
 }
