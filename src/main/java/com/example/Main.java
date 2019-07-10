@@ -23,40 +23,41 @@ import java.util.Calendar;
 public class Main {
 
 	public static void main(String[] args) throws Exception {
-	
-		if(args.length < 2)
+
+		if (args.length < 2)
 			throw new RuntimeException("O host e porta da aplicação deve ser passados como argumento");
-		
+
 		String host = args[0];
 		int porta = Integer.valueOf(args[1]);
-		System.out.println("O app vai começar a rodar com o host "+host+" e a porta "+porta);
-		
+		System.out.println("O app vai começar a rodar com o host " + host + " e a porta " + porta);
+
 		Client client;
 		Server server;
 
 		server = new Server(host, porta);
-		client = new Client(host, porta); 
-		
+		client = new Client(host, porta);
+
 		server.start();
 
 		client.sendEcho("hello server");
 		client.sendEcho("server is working");
 
-		 
 		LeArquivos le = new LeArquivos();
 		Arquivo g = new Arquivo("/teste/data.txt");
-		
+
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-mm-dd HH:mm:ss");
 		String data = sdf.format(cal.getTime());
-		
+
 		le.le();
 		File[] arquivos = le.listaArquivos();
-		for (int i = 0; i < arquivos.length; i++) {
-			System.out.println(arquivos[i]);  			 
-			g.grava("peer:nome_do_peer;metadados_do_arquivo:"+arquivos[i]+"hora_da_gravacao:"+data+"\n");
-			
-		}
+
+		if (arquivos != null)
+			for (int i = 0; i < arquivos.length; i++) {
+				System.out.println(arquivos[i]);
+				g.grava("peer:nome_do_peer;metadados_do_arquivo:" + arquivos[i] + "hora_da_gravacao:" + data + "\n");
+
+			}
 	}
 
 }
