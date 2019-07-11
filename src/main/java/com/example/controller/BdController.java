@@ -20,9 +20,4 @@ public class BdController {
 	String db(Map<String, Object> model) {
 		return bo.testaBd(model);
 	}
-	
-	@RequestMapping(path = "/init", method = RequestMethod.GET)
-	String init() {
-		return bo.inicializa();
-	}
 }

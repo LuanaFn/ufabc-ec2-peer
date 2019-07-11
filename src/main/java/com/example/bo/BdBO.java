@@ -81,7 +81,7 @@ public class BdBO {
 	}
 
 	@PostConstruct 
-	public String inicializa() {
+	public String inicializa(){
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
 			
@@ -114,9 +114,7 @@ public class BdBO {
 	private String getSql(String filename) throws IOException {
 		ClassLoader classLoader = this.getClass().getClassLoader();
 
-		File file = new File(classLoader.getResource("sql/".concat(filename).concat(".sql")).getFile());
-
-		return new String(Files.readAllBytes(file.toPath()));
+		return new String(classLoader.getResourceAsStream("sql/".concat(filename).concat(".sql")).readAllBytes());
 	}
 
 	private String resultSetPrettyPrint(ResultSet rs) throws SQLException {
