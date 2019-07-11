@@ -38,6 +38,9 @@ public class BdBO {
 
 	@Value("${udp.port}")
 	private String udpPort;
+	
+	@Value("${app.host}")
+	private String apphost;
 
 	@Autowired
 	private DataSource dataSource;
@@ -91,7 +94,7 @@ public class BdBO {
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
 
-			stmt.setString(1, InetAddress.getLocalHost().getHostName());
+			stmt.setString(1, apphost);
 			stmt.setInt(2, Integer.valueOf(udpPort));
 
 			stmt.executeUpdate();
