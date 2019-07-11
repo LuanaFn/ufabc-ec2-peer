@@ -85,7 +85,7 @@ public class BdBO {
 	}
 
 	@PostConstruct
-	public String inicializa() {
+	public void inicializa() {
 		//String teste = getSql("init");
 
 		try (Connection connection = dataSource.getConnection()) {
@@ -100,14 +100,11 @@ public class BdBO {
 
 			ResultSet rs = stmt.executeQuery();
 
-			String retorno = "Dynos online: \n" + resultSetPrettyPrint(rs);
+			System.out.println("Dynos online: \n" + resultSetPrettyPrint(rs));
 
 			connection.close();
-
-			return retorno;
 		} catch (Exception e) {
 			LOGGER.error("Erro ao abrir conexão.", e);
-			return "error";
 		}
 	}
 
