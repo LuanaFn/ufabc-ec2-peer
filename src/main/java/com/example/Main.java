@@ -16,40 +16,45 @@
 
 package com.example;
 
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.core.env.ConfigurableEnvironment;
+import org.springframework.core.env.PropertySource;
+
+import java.util.Map;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.core.env.MutablePropertySources;
-import org.springframework.core.env.StandardEnvironment;
 
 @SpringBootApplication
 public class Main {
-	
+
 	public static void main(String[] args) throws Exception {
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		ConfigurableEnvironment env = context.getEnvironment();
+		printSources(env);
+		System.out.println("---- System properties -----");
+		printMap(env.getSystemProperties());
+		System.out.println("---- System Env properties -----");
+		printMap(env.getSystemEnvironment());
 		
-		SpringApplicationBuilder applicationBuilder = new SpringApplicationBuilder(Main.class)
-	            .environment(new StandardEnvironment(){
-	                @Override
-	                protected void customizePropertySources(MutablePropertySources propertySources) {
-	                    // do not add system or env properties to the set of property sources
-	                	propertySources.remove("JDBC_DATABASE_URL");
-	                	propertySources.remove("SPRING_DATASOURCE_URL");
-	                	propertySources.remove("DATABASE_URL");
-	                	propertySources.remove("SPRING_DATASOURCE_PASSWORD");
-	                	propertySources.remove("JDBC_DATABASE_USERNAME");
-	                	propertySources.remove("SPRING_DATASOURCE_USERNAME"); 
-	                	
-	                	//chama o mesmo método sem essa variável
-	                	super.customizePropertySources(propertySources);
-	                }
-	            });
+		// System.out.println("Args len: "+args.length);
+		// for(int i = 0; i < args.length; i++)
+		// System.out.println("ARGS["+i+"] = "+args[i]);
 		
-//		System.out.println("Args len: "+args.length);
-//		for(int i = 0; i < args.length; i++)
-//			System.out.println("ARGS["+i+"] = "+args[i]);
-		//SpringApplication.run(Main.class, args);
-		
-		applicationBuilder.run(args);
+		SpringApplication.run(Main.class, args);
 	}
 
+	private static void printSources (ConfigurableEnvironment env) {
+        System.out.println("---- property sources ----");
+        for (PropertySource<?> propertySource : env.getPropertySources()) {
+            System.out.println("name =  " + propertySource.getName() + "\nsource = " + propertySource
+                                .getSource().getClass()+"\n");
+        }
+    }
+
+    private static void printMap (Map<?, ?> map) {
+        map.entrySet()
+           .stream()
+           .forEach(e -> System.out.println(e.getKey() + " = " + e.getValue()));
+
+    }
 }
