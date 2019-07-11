@@ -1,1 +1,1 @@
-web: target/universal/stage/bin/play-ws-test -Dhttp.port=${PORT} -Dconfig.file=conf/application.conf
+web: java -jar target/java-getting-started-1.0.jar
