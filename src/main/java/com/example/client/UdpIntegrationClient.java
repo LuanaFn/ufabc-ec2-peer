@@ -8,10 +8,10 @@ import org.springframework.integration.support.MessageBuilder;
 import org.springframework.stereotype.Service;
 
 @Service
-public class UdpIntegrationClient implements UdpClient{
+public class UdpIntegrationClient implements UdpClient {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(UdpIntegrationClient.class);
-	
+
 	private final UnicastSendingMessageHandler udpSendingAdapter;
 
 	@Autowired
@@ -20,7 +20,8 @@ public class UdpIntegrationClient implements UdpClient{
 	}
 
 	public void sendMessage(String message) {
-		LOGGER.info("Sending UDP message: {}", message);
+		LOGGER.info("Enviando UDP: {} para host = " + udpSendingAdapter.getHost() + " e porta = "
+				+ udpSendingAdapter.getPort(), message);
 		udpSendingAdapter.handleMessage(MessageBuilder.withPayload(message).build());
 	}
 }

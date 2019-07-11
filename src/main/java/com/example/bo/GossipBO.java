@@ -29,7 +29,7 @@ import com.example.repository.EstadoRepository;
 public class GossipBO {
 
 	@Autowired
-	EstadoRepository repo;
+	private EstadoRepository repo;
 
 	private final long SEGUNDO = 1000;
 	private final long MINUTO = SEGUNDO * 60;
@@ -101,5 +101,16 @@ public class GossipBO {
 			LOGGER.error("Erro ao transmitir mensagem.", e);
 		}
 		
+	}
+	
+	public void atualizaEstado(String mensagem) {
+		Estado estado = repo.findAll().get(0);
+		
+		estado.setMensagem(mensagem);
+		estado.setTime(new Date());
+		
+		repo.save(estado);
+		
+		repo.flush();
 	}
 }
