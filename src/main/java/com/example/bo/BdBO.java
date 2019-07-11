@@ -100,7 +100,7 @@ public class BdBO {
 
 			ResultSet rs = stmt.executeQuery();
 
-			System.out.println("Dynos online: \n" + resultSetPrettyPrint(rs));
+			System.out.println(resultSetPrettyPrint(rs));
 
 			connection.close();
 		} catch (Exception e) {
@@ -128,7 +128,7 @@ public class BdBO {
 	private String resultSetPrettyPrint(ResultSet rs) throws SQLException {
 		ResultSetMetaData rsmd = rs.getMetaData();
 
-		String result = new String();
+		String result = new String("RESULTADO DO SQL: ");
 
 		int columnsNumber = rsmd.getColumnCount();
 		while (rs.next()) {
