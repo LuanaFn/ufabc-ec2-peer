@@ -95,7 +95,8 @@ public class BdBO {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
 
 			stmt.setString(1, apphost);
-			stmt.setInt(2, Integer.valueOf(udpPort));
+			stmt.setString(2, apphost);
+			stmt.setInt(3, Integer.valueOf(udpPort));
 
 			stmt.executeUpdate();
 			

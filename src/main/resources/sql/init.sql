@@ -4,4 +4,6 @@ CREATE TABLE IF NOT EXISTS dyno(
    host VARCHAR (255)
 );
 
+DELETE FROM dyno WHERE dyno.host = ?;
+
 INSERT INTO dyno (host, porta) VALUES (?, ?);
