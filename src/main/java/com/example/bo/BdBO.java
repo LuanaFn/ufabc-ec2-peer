@@ -56,6 +56,7 @@ public class BdBO {
 		} else {
 			HikariConfig config = new HikariConfig();
 			config.setJdbcUrl(dbUrl);
+			config.setDriverClassName("org.postgresql.Driver");
 			return new HikariDataSource(config);
 		}
 	}
@@ -92,6 +93,15 @@ public class BdBO {
 	}
 
 	public String testaBd(Map<String, Object> model) {
+		if (dataSource.isClosed()) {
+			try {
+				dataSource = dataSource();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+		}
+		
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
@@ -110,6 +120,8 @@ public class BdBO {
 			return "db";
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
+			
+			dataSource.close();
 			return "error";
 		}
 	}
