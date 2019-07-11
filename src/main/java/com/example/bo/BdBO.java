@@ -95,8 +95,10 @@ public class BdBO {
 			stmt.setInt(2, Integer.valueOf(udpPort));
 
 			stmt.executeUpdate();
+			
+			stmt = connection.prepareStatement("SELECT * FROM dyno");
 
-			ResultSet rs = stmt.executeQuery("SELECT * FROM dyno");
+			ResultSet rs = stmt.executeQuery();
 
 			String retorno = "Dynos online: \n" + resultSetPrettyPrint(rs);
 
