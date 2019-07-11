@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Map;
+import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
@@ -84,8 +85,8 @@ public class BdBO {
 	}
 
 	@PostConstruct
-	public String inicializa() throws IOException {
-		String teste = getSql("init");
+	public String inicializa() {
+		//String teste = getSql("init");
 
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
@@ -118,7 +119,11 @@ public class BdBO {
 	 */
 	private String getSql(String filename) throws IOException {
 		InputStream stream = resourceLoader.getResource("classpath:sql/".concat(filename).concat(".sql")).getInputStream();
-		return new String(stream.readAllBytes());
+		
+		Scanner s = new Scanner(stream).useDelimiter("\\A");
+		String result = s.hasNext() ? s.next() : "";
+		
+		return result;
 	}
 
 	private String resultSetPrettyPrint(ResultSet rs) throws SQLException {
