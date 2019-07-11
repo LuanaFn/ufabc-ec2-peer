@@ -136,9 +136,9 @@ public class BdBO {
 				if (i > 1)
 					result.concat("\n,  ");
 				String columnValue = rs.getString(i);
-				result.concat("\n" + columnValue + " " + rsmd.getColumnName(i));
+				result = result.concat("\n" + columnValue + " " + rsmd.getColumnName(i));
 			}
-			result.concat("\n");
+			result = result.concat("\n");
 		}
 
 		return result;
