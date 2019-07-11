@@ -34,6 +34,10 @@ public class Main {
 	                    // do not add system or env properties to the set of property sources
 	                	propertySources.remove("JDBC_DATABASE_URL");
 	                	propertySources.remove("SPRING_DATASOURCE_URL");
+	                	propertySources.remove("DATABASE_URL");
+	                	propertySources.remove("SPRING_DATASOURCE_PASSWORD");
+	                	propertySources.remove("JDBC_DATABASE_USERNAME");
+	                	propertySources.remove("SPRING_DATASOURCE_USERNAME"); 
 	                	
 	                	//chama o mesmo método sem essa variável
 	                	super.customizePropertySources(propertySources);
