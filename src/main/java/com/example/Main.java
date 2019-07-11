@@ -33,6 +33,7 @@ public class Main {
 	                protected void customizePropertySources(MutablePropertySources propertySources) {
 	                    // do not add system or env properties to the set of property sources
 	                	propertySources.remove("JDBC_DATABASE_URL");
+	                	propertySources.remove("SPRING_DATASOURCE_URL");
 	                	
 	                	//chama o mesmo método sem essa variável
 	                	super.customizePropertySources(propertySources);
