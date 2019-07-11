@@ -1,4 +1,4 @@
-package com.example.controller;
+package com.example.bo;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -12,28 +12,30 @@ import javax.sql.DataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
-@Controller
-public class HomeController {
-
+public class BdBO {
+	
 	@Value("${spring.datasource.url}")
 	private String dbUrl;
-
+	
 	@Autowired
 	private DataSource dataSource;
-
-	@RequestMapping("/")
-	String index() {
-		return "index";
+	
+	@Bean
+	public DataSource dataSource() throws SQLException {
+		if (dbUrl == null || dbUrl.isEmpty()) {
+			return new HikariDataSource();
+		} else {
+			HikariConfig config = new HikariConfig();
+			config.setJdbcUrl(dbUrl);
+			return new HikariDataSource(config);
+		}
 	}
-
-	@RequestMapping("/db")
-	String db(Map<String, Object> model) {
+	
+	public String testaBd(Map<String, Object> model) {
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
 			stmt.executeUpdate("CREATE TABLE IF NOT EXISTS ticks (tick timestamp)");
@@ -50,17 +52,6 @@ public class HomeController {
 		} catch (Exception e) {
 			model.put("message", e.getMessage());
 			return "error";
-		}
-	}
-
-	@Bean
-	public DataSource dataSource() throws SQLException {
-		if (dbUrl == null || dbUrl.isEmpty()) {
-			return new HikariDataSource();
-		} else {
-			HikariConfig config = new HikariConfig();
-			config.setJdbcUrl(dbUrl);
-			return new HikariDataSource(config);
 		}
 	}
 }
