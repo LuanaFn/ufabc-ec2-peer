@@ -96,7 +96,7 @@ public class BdBO {
 
 			stmt.setString(1, apphost);
 			stmt.setString(2, apphost);
-			stmt.setInt(3, Integer.valueOf(udpPort));
+			stmt.setInt(3, Integer.valueOf(udpPort)); 
 
 			stmt.executeUpdate();
 			
