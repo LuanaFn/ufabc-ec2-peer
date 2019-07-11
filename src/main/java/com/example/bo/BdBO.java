@@ -43,7 +43,7 @@ public class BdBO {
 	private String apphost;
 
 	@Autowired
-	private DataSource dataSource;
+	private HikariDataSource dataSource;
 	
 	@Autowired
 	ResourceLoader resourceLoader;
@@ -54,7 +54,7 @@ public class BdBO {
 	}
 
 	@Bean
-	public DataSource dataSource() throws SQLException {
+	public HikariDataSource dataSource() throws SQLException {
 		if (dbUrl == null || dbUrl.isEmpty()) {
 			return new HikariDataSource();
 		} else {
@@ -90,7 +90,7 @@ public class BdBO {
 	@PostConstruct
 	public void inicializa() {
 		//String teste = getSql("init");
-
+		
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
 
@@ -106,7 +106,7 @@ public class BdBO {
 
 			System.out.println(resultSetPrettyPrint(rs));
 			
-			connection.close();
+			dataSource.close();
 		} catch (Exception e) {
 			LOGGER.error("Erro ao abrir conexão.", e);
 		}
