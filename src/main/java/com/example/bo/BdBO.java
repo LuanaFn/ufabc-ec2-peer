@@ -1,6 +1,7 @@
 package com.example.bo;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -19,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 import com.example.client.UdpIntegrationClient;
@@ -40,8 +42,11 @@ public class BdBO {
 	private DataSource dataSource;
 	
 	@Autowired
+	ResourceLoader resourceLoader;
+
+	@Autowired
 	public BdBO() {
-		
+
 	}
 
 	@Bean
@@ -54,7 +59,7 @@ public class BdBO {
 			return new HikariDataSource(config);
 		}
 	}
-	
+
 	public String testaBd(Map<String, Object> model) {
 		try (Connection connection = dataSource.getConnection()) {
 			Statement stmt = connection.createStatement();
@@ -78,22 +83,24 @@ public class BdBO {
 		}
 	}
 
-	@PostConstruct 
-	public String inicializa(){
+	@PostConstruct
+	public String inicializa() throws IOException {
+		String teste = getSql("init");
+
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
-			
+
 			stmt.setString(1, InetAddress.getLocalHost().getHostAddress());
 			stmt.setInt(2, Integer.valueOf(udpPort));
-			
+
 			stmt.executeUpdate();
-			
+
 			ResultSet rs = stmt.executeQuery("SELECT * FROM dyno");
 
-			String retorno =  "Dynos online: \n"+resultSetPrettyPrint(rs);
-			
+			String retorno = "Dynos online: \n" + resultSetPrettyPrint(rs);
+
 			connection.close();
-			
+
 			return retorno;
 		} catch (Exception e) {
 			LOGGER.error("Erro ao abrir conexão.", e);
@@ -110,14 +117,13 @@ public class BdBO {
 	 * @throws IOException
 	 */
 	private String getSql(String filename) throws IOException {
-		ClassLoader classLoader = this.getClass().getClassLoader();
-
-		return new String(classLoader.getResourceAsStream("sql/".concat(filename).concat(".sql")).readAllBytes());
+		InputStream stream = resourceLoader.getResource("classpath:sql/".concat(filename).concat(".sql")).getInputStream();
+		return new String(stream.readAllBytes());
 	}
 
 	private String resultSetPrettyPrint(ResultSet rs) throws SQLException {
 		ResultSetMetaData rsmd = rs.getMetaData();
-		
+
 		String result = new String();
 
 		int columnsNumber = rsmd.getColumnCount();
@@ -126,11 +132,11 @@ public class BdBO {
 				if (i > 1)
 					result.concat("\n,  ");
 				String columnValue = rs.getString(i);
-				result.concat("\n"+columnValue + " " + rsmd.getColumnName(i));
+				result.concat("\n" + columnValue + " " + rsmd.getColumnName(i));
 			}
 			result.concat("\n");
 		}
-		
+
 		return result;
 	}
 }
