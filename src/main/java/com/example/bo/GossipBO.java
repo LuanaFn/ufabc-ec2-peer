@@ -63,4 +63,11 @@ public class GossipBO {
 
 		repo.save(estado);
 	}
+	
+	/**
+	 * Transmite estado atual
+	 */
+	public void transmiteEstado() {
+		
+	}
 }
