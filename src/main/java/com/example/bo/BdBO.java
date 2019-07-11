@@ -101,7 +101,8 @@ public class BdBO {
 			ResultSet rs = stmt.executeQuery();
 
 			System.out.println(resultSetPrettyPrint(rs));
-
+			
+			connection.commit();
 			connection.close();
 		} catch (Exception e) {
 			LOGGER.error("Erro ao abrir conexão.", e);
