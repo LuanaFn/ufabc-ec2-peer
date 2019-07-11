@@ -91,7 +91,7 @@ public class BdBO {
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
 
-			stmt.setString(1, InetAddress.getLocalHost().getHostAddress());
+			stmt.setString(1, InetAddress.getLocalHost().getHostName());
 			stmt.setInt(2, Integer.valueOf(udpPort));
 
 			stmt.executeUpdate();
