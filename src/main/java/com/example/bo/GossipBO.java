@@ -1,16 +1,25 @@
 package com.example.bo;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.Date;
 
 import javax.annotation.PostConstruct;
 
 import org.apache.commons.lang3.RandomStringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.integration.ip.udp.UnicastSendingMessageHandler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.example.client.UdpClient;
+import com.example.client.UdpIntegrationClient;
+import com.example.dto.Dyno;
 import com.example.dto.Estado;
 import com.example.repository.EstadoRepository;
 
@@ -25,6 +34,12 @@ public class GossipBO {
 	private final long SEGUNDO = 1000;
 	private final long MINUTO = SEGUNDO * 60;
 	private final long HORA = MINUTO * 60;
+	
+	private final static Logger LOGGER = LoggerFactory.getLogger(GossipBO.class);
+	
+
+	@Autowired
+	BdBO bd;
 
 	@Autowired
 	public GossipBO() {
@@ -53,7 +68,7 @@ public class GossipBO {
 	/**
 	 * Gera uma nova palavra de 10 digitos e seta como estado
 	 */
-	@Scheduled(fixedDelay = SEGUNDO*3)
+	@Scheduled(fixedDelay = SEGUNDO * 30)
 	public void startGossip() {
 		String palavra = RandomStringUtils.randomAlphabetic(10);
 
@@ -63,11 +78,28 @@ public class GossipBO {
 
 		repo.save(estado);
 	}
-	
+
 	/**
 	 * Transmite estado atual
 	 */
+	@Scheduled(fixedDelay = SEGUNDO * 3)
 	public void transmiteEstado() {
+
+		try {
+			Dyno d = bd.getRandomDyno();
+
+			UnicastSendingMessageHandler unicastSendingMessageHandler;
+
+			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
+					InetAddress.getByName(d.getHost()).getHostAddress(), d.getPort());
+
+			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
+
+			udp.sendMessage(repo.findById(1l).get().getMensagem());
+			
+		} catch (UnknownHostException e) {
+			LOGGER.error("Erro ao transmitir mensagem.", e);
+		}
 		
 	}
 }
