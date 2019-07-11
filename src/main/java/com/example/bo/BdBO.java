@@ -2,7 +2,6 @@ package com.example.bo;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.InetAddress;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -14,7 +13,6 @@ import java.util.Map;
 import java.util.Scanner;
 
 import javax.annotation.PostConstruct;
-import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +31,7 @@ public class BdBO {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(UdpIntegrationClient.class);
 
-	@Value("${spring.datasource.url}")
+	@Value("${spring.datasource.hikari.url}")
 	private String dbUrl;
 
 	@Value("${udp.port}")
@@ -42,7 +40,6 @@ public class BdBO {
 	@Value("${app.host}")
 	private String apphost;
 
-	@Autowired
 	private HikariDataSource dataSource;
 	
 	@Autowired
@@ -53,7 +50,6 @@ public class BdBO {
 
 	}
 
-	@Bean
 	public HikariDataSource dataSource() throws SQLException {
 		if (dbUrl == null || dbUrl.isEmpty()) {
 			return new HikariDataSource();
@@ -88,8 +84,9 @@ public class BdBO {
 	}
 
 	@PostConstruct
-	public void inicializa() {
+	public void inicializa() throws SQLException {
 		//String teste = getSql("init");
+		dataSource = dataSource();
 		
 		try (Connection connection = dataSource.getConnection()) {
 			PreparedStatement stmt = connection.prepareStatement(getSql("init"));
