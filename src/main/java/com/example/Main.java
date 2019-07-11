@@ -24,6 +24,9 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 public class Main {
 	
 	public static void main(String[] args) throws Exception {
+		
+		for(int i = 0; i < args.length; i++)
+			System.out.println("ARGS["+i+"] = "+args[i]);
 		SpringApplication.run(Main.class, args);
 	}
 
