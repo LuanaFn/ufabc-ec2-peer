@@ -1,9 +1,7 @@
 package com.example.bo;
 
-import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
