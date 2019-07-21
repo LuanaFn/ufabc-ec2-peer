@@ -4,6 +4,8 @@ import java.util.HashMap;
 
 import javax.sql.DataSource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -17,6 +19,8 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
+import com.example.client.UdpIntegrationClient;
+import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
@@ -28,6 +32,9 @@ public class LocalBDConfig {
 	
 	@Value("${spring.datasource.local.url}")
 	private  String jdbcUrl;
+	
+	private final static Logger log = LoggerFactory.getLogger(LocalBDConfig.class);
+
 
 	@Bean
 	public LocalContainerEntityManagerFactoryBean localEntityManager() {
@@ -37,6 +44,7 @@ public class LocalBDConfig {
 		if(ds.getJdbcUrl() == null) ds.setJdbcUrl(jdbcUrl);
 		
 		em.setDataSource(ds);
+		
 		em.setPackagesToScan(new String[] { "com.example.dto.local" });
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
@@ -52,13 +60,13 @@ public class LocalBDConfig {
 	@Bean
 	public DataSource localDataSource() {
 
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName(env.getProperty("spring.datasource.local.driverClassName"));
-		dataSource.setUrl(env.getProperty("spring.datasource.local.url"));
-		dataSource.setUsername(env.getProperty("spring.datasource.local.username"));
-		dataSource.setPassword(env.getProperty("spring.datasource.local.password"));
+		HikariConfig config = new HikariConfig();
+		config.setDriverClassName(env.getProperty("spring.datasource.local.driverClassName"));
+		config.setJdbcUrl(env.getProperty("spring.datasource.local.url"));
+		config.setUsername(env.getProperty("spring.datasource.local.username"));
+		config.setPassword(env.getProperty("spring.datasource.local.password"));
 
-		return dataSource;
+		return new HikariDataSource(config);
 	}
 
 	@Bean
