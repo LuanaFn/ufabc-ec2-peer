@@ -10,21 +10,21 @@ import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.integration.ip.udp.UnicastSendingMessageHandler;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.example.client.UdpClient;
 import com.example.client.UdpIntegrationClient;
-import com.example.dto.Dyno;
-import com.example.dto.Estado;
-import com.example.repository.EstadoRepository;
+import com.example.dto.global.Instancia;
+import com.example.dto.local.Estado;
+import com.example.repository.local.EstadoRepository;
 
 @EnableScheduling
-@EnableJpaRepositories("com.example.repository")
+@EnableJpaRepositories("com.example.repository.local")
+@ComponentScan("com.example.dto.local")
 @Component
 public class GossipBO {
 
@@ -86,7 +86,7 @@ public class GossipBO {
 	public void transmiteEstado() {
 
 		try {
-			Dyno d = bd.getRandomDyno();
+			Instancia d = bd.getRandomDyno();
 
 			UnicastSendingMessageHandler unicastSendingMessageHandler;
 
