@@ -26,21 +26,40 @@ import com.zaxxer.hikari.HikariDataSource;
 public class GlobalBDConfig {
 	@Autowired
 	private Environment env;
-	
+
 	@Value("${spring.datasource.driverClassName}")
 	String driverClassName;
-	
+
 	@Value("${spring.datasource.url}")
-	private  String jdbcUrl;
+	private String jdbcUrl;
+
+	@Value("${spring.datasource.hikari.connection-timeout}")
+	private String conTimeout;
+	
+	@Value("${spring.datasource.hikari.minimum-idle}")
+	private String minIdle;
+	
+	@Value("${spring.datasource.hikari.maximum-pool-size}")
+	private String maxPool;
+	
+	@Value("${spring.datasource.hikari.idle-timeout}")
+	private String idleTimeout;
+	
+	@Value("${spring.datasource.hikari.max-lifetime}")
+	private String maxLifetime;
+	
+	@Value("${spring.datasource.hikari.auto-commit}")
+	private String autoCommit;
 
 	@Bean
 	@Primary
 	public LocalContainerEntityManagerFactoryBean globalEntityManager() {
 		LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
-		
+
 		HikariDataSource ds = (HikariDataSource) globalDataSource();
-		if(ds.getJdbcUrl() == null) ds.setJdbcUrl(jdbcUrl);
-		
+		if (ds.getJdbcUrl() == null) ds.setJdbcUrl(jdbcUrl);
+		if(ds.getMaximumPoolSize() > 2) ds.setMaximumPoolSize(Integer.valueOf(maxPool));
+
 		em.setDataSource(ds);
 		em.setPackagesToScan(new String[] { "com.example.dto.global" });
 
@@ -61,6 +80,13 @@ public class GlobalBDConfig {
 		HikariConfig config = new HikariConfig();
 		config.setDriverClassName(driverClassName);
 		config.setJdbcUrl(jdbcUrl);
+		config.setAutoCommit(Boolean.valueOf(autoCommit));
+		config.setConnectionTimeout(Long.valueOf(conTimeout));
+		config.setMinimumIdle(Integer.valueOf(minIdle));
+		config.setMaximumPoolSize(Integer.valueOf(maxPool));
+		config.setIdleTimeout(Long.valueOf(idleTimeout));
+		config.setMaxLifetime(Long.valueOf(maxLifetime));
+		
 		// config.setUsername(env.getProperty("spring.datasource.username"));
 		// config.setPassword(env.getProperty("spring.datasource.password"));
 
