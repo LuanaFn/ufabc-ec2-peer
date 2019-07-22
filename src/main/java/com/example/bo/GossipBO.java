@@ -20,10 +20,7 @@ import org.springframework.stereotype.Component;
 import com.example.client.UdpIntegrationClient;
 import com.example.dto.global.Instancia;
 import com.example.dto.local.Estado;
-import com.example.repository.global.InstanciaRepository;
 import com.example.repository.local.EstadoRepository;
-
-import jdk.internal.org.jline.utils.Log;
 
 @EnableScheduling
 @EnableJpaRepositories("com.example.repository.local")
