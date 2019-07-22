@@ -20,7 +20,10 @@ import org.springframework.stereotype.Component;
 import com.example.client.UdpIntegrationClient;
 import com.example.dto.global.Instancia;
 import com.example.dto.local.Estado;
+import com.example.repository.global.InstanciaRepository;
 import com.example.repository.local.EstadoRepository;
+
+import jdk.internal.org.jline.utils.Log;
 
 @EnableScheduling
 @EnableJpaRepositories("com.example.repository.local")
@@ -89,13 +92,16 @@ public class GossipBO {
 			Instancia d = bd.getRandomDyno();
 
 			UnicastSendingMessageHandler unicastSendingMessageHandler;
+			
+			String host = InetAddress.getByName(d.getHost()).getHostAddress();
 
 			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
-					InetAddress.getByName(d.getHost()).getHostAddress(), d.getPort());
+					host, d.getPort());
 
 			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
 
 			udp.sendMessage(repo.findById(1l).get().getMensagem());
+			
 			
 		} catch (UnknownHostException e) {
 			LOGGER.error("Erro ao transmitir mensagem.", e);

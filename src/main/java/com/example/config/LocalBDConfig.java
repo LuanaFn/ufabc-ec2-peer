@@ -52,6 +52,7 @@ public class LocalBDConfig {
 		HashMap<String, Object> properties = new HashMap<>();
 		properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
 		properties.put("hibernate.dialect", env.getProperty("spring.jpa.local.properties.hibernate.dialect"));
+		properties.put("hibernate.show_sql", env.getProperty("spring.jpa.local.show-sql"));
 		em.setJpaPropertyMap(properties);
 
 		return em;

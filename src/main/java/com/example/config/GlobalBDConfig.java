@@ -68,6 +68,8 @@ public class GlobalBDConfig {
 		HashMap<String, Object> properties = new HashMap<>();
 		properties.put("hibernate.hbm2ddl.auto", env.getProperty("spring.jpa.hibernate.ddl-auto"));
 		properties.put("hibernate.dialect", env.getProperty("spring.jpa.properties.hibernate.dialect"));
+		properties.put("hibernate.show_sql", env.getProperty("spring.jpa.show-sql"));
+		
 		em.setJpaPropertyMap(properties);
 
 		return em;

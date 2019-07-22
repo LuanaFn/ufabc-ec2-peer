@@ -1,5 +1,7 @@
 package com.example.dto.global;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -13,6 +15,7 @@ public class Instancia {
 	private Long id;
 	int port;
 	String host;
+	private Date time;
 	
 	public Long getId() {
 		return id;
@@ -31,6 +34,12 @@ public class Instancia {
 	}
 	public void setHost(String host) {
 		this.host = host;
+	}
+	public Date getTime() {
+		return time;
+	}
+	public void setTime(Date time) {
+		this.time = time;
 	}
 	
 	
