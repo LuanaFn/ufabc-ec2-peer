@@ -1,4 +1,4 @@
-package com.example.config;
+package com.ufabc.sistemasdistribuidos.config;
 
 import java.util.HashMap;
 
@@ -22,7 +22,7 @@ import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @PropertySource({ "classpath:application.properties" })
-@EnableJpaRepositories(basePackages = "com.example.repository.global", entityManagerFactoryRef = "globalEntityManager", transactionManagerRef = "globalTransactionManager")
+@EnableJpaRepositories(basePackages = "com.ufabc.sistemasdistribuidos.repository.global", entityManagerFactoryRef = "globalEntityManager", transactionManagerRef = "globalTransactionManager")
 public class GlobalBDConfig {
 	@Autowired
 	private Environment env;
@@ -61,7 +61,7 @@ public class GlobalBDConfig {
 		if(ds.getMaximumPoolSize() > 2) ds.setMaximumPoolSize(Integer.valueOf(maxPool));
 
 		em.setDataSource(ds);
-		em.setPackagesToScan(new String[] { "com.example.dto.global" });
+		em.setPackagesToScan(new String[] { "com.ufabc.sistemasdistribuidos.dto.global" });
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);

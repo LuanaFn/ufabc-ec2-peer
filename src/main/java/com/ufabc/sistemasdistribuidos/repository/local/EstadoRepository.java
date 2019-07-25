@@ -1,8 +1,8 @@
-package com.example.repository.local;
+package com.ufabc.sistemasdistribuidos.repository.local;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.dto.local.Estado;
+import com.ufabc.sistemasdistribuidos.dto.local.Estado;
 
 public interface EstadoRepository extends JpaRepository<Estado, Long> {
 

@@ -1,4 +1,4 @@
-package com.example.client;
+package com.ufabc.sistemasdistribuidos.client;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

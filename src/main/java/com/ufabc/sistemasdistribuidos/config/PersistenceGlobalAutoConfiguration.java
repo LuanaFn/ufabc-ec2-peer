@@ -1,4 +1,4 @@
-package com.example.config;
+package com.ufabc.sistemasdistribuidos.config;
 
 import javax.sql.DataSource;
 
@@ -12,7 +12,7 @@ import org.springframework.context.annotation.PropertySource;
 
 @Configuration
 @PropertySource({ "classpath:application.properties" })
-@EnableJpaRepositories(basePackages = "com.example.repository.global", entityManagerFactoryRef = "globalEntityManager", transactionManagerRef = "globalTransactionManager")
+@EnableJpaRepositories(basePackages = "com.ufabc.sistemasdistribuidos.repository.global", entityManagerFactoryRef = "globalEntityManager", transactionManagerRef = "globalTransactionManager")
 public class PersistenceGlobalAutoConfiguration {
 	@Primary
 	@Bean

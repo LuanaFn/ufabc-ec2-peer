@@ -1,4 +1,4 @@
-package com.example.service;
+package com.ufabc.sistemasdistribuidos.service;
 
 import java.util.Map;
 
@@ -10,7 +10,7 @@ import org.springframework.integration.annotation.ServiceActivator;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.handler.annotation.Headers;
 
-import com.example.bo.GossipBO;
+import com.ufabc.sistemasdistribuidos.bo.GossipBO;
 
 @MessageEndpoint
 public class UdpInboundMessageHandler {

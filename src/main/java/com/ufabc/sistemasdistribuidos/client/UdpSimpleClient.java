@@ -1,4 +1,4 @@
-package com.example.client;
+package com.ufabc.sistemasdistribuidos.client;
 
 import java.io.IOException;
 import java.net.DatagramPacket;

@@ -1,4 +1,4 @@
-package com.example.bo;
+package com.ufabc.sistemasdistribuidos.bo;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -17,14 +17,14 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import com.example.client.UdpIntegrationClient;
-import com.example.dto.global.Instancia;
-import com.example.dto.local.Estado;
-import com.example.repository.local.EstadoRepository;
+import com.ufabc.sistemasdistribuidos.client.UdpIntegrationClient;
+import com.ufabc.sistemasdistribuidos.dto.global.Instancia;
+import com.ufabc.sistemasdistribuidos.dto.local.Estado;
+import com.ufabc.sistemasdistribuidos.repository.local.EstadoRepository;
 
 @EnableScheduling
-@EnableJpaRepositories("com.example.repository.local")
-@ComponentScan("com.example.dto.local")
+@EnableJpaRepositories("com.ufabc.sistemasdistribuidos.repository.local")
+@ComponentScan("com.ufabc.sistemasdistribuidos.dto.local")
 @Component
 public class GossipBO {
 

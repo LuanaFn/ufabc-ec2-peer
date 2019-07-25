@@ -1,4 +1,4 @@
-package com.example.config;
+package com.ufabc.sistemasdistribuidos.config;
 
 import javax.sql.DataSource;
 
@@ -11,7 +11,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @Configuration
 @PropertySource({ "classpath:application.properties" })
-@EnableJpaRepositories(basePackages = "com.example.repository.local", entityManagerFactoryRef = "localEntityManager", transactionManagerRef = "localTransactionManager")
+@EnableJpaRepositories(basePackages = "com.ufabc.sistemasdistribuidos.repository.local", entityManagerFactoryRef = "localEntityManager", transactionManagerRef = "localTransactionManager")
 public class PersistenceLocalAutoConfiguration {
 	@Bean
     @ConfigurationProperties(prefix="spring.datasource.local")

@@ -1,4 +1,4 @@
-package com.example.repository.global;
+package com.ufabc.sistemasdistribuidos.repository.global;
 
 import java.util.Date;
 import java.util.List;
@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-import com.example.dto.global.Instancia;
+import com.ufabc.sistemasdistribuidos.dto.global.Instancia;
 
 public interface InstanciaRepository extends JpaRepository<Instancia, Long> {
 	@Query("select i from Instancia i where i.time < :time")

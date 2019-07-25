@@ -1,4 +1,4 @@
-package com.example.config;
+package com.ufabc.sistemasdistribuidos.config;
 
 import java.util.HashMap;
 
@@ -19,13 +19,13 @@ import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 
-import com.example.client.UdpIntegrationClient;
+import com.ufabc.sistemasdistribuidos.client.UdpIntegrationClient;
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 
 @Configuration
 @PropertySource({ "classpath:application.properties" })
-@EnableJpaRepositories(basePackages = "com.example.repository.local", entityManagerFactoryRef = "localEntityManager", transactionManagerRef = "localTransactionManager")
+@EnableJpaRepositories(basePackages = "com.ufabc.sistemasdistribuidos.repository.local", entityManagerFactoryRef = "localEntityManager", transactionManagerRef = "localTransactionManager")
 public class LocalBDConfig {
 	@Autowired
 	private Environment env;
@@ -45,7 +45,7 @@ public class LocalBDConfig {
 		
 		em.setDataSource(ds);
 		
-		em.setPackagesToScan(new String[] { "com.example.dto.local" });
+		em.setPackagesToScan(new String[] { "com.ufabc.sistemasdistribuidos.dto.local" });
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		em.setJpaVendorAdapter(vendorAdapter);

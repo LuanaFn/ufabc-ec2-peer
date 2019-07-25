@@ -1,4 +1,4 @@
-package com.example.dto.global;
+package com.ufabc.sistemasdistribuidos.dto.local;
 
 import java.util.Date;
 
@@ -8,39 +8,40 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 @Entity
-public class Instancia {
-	
+public class Estado {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
-	int port;
-	String host;
+	
+	private String mensagem;
 	private Date time;
 	
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public int getPort() {
-		return port;
+
+	public String getMensagem() {
+		return mensagem;
 	}
-	public void setPort(int port) {
-		this.port = port;
+
+	public void setMensagem(String mensagem) {
+		this.mensagem = mensagem;
 	}
-	public String getHost() {
-		return host;
-	}
-	public void setHost(String host) {
-		this.host = host;
-	}
+
 	public Date getTime() {
 		return time;
 	}
+
 	public void setTime(Date time) {
 		this.time = time;
 	}
-	
-	
+
+	@Override
+	public String toString() {
+		return String.format("Estado[id=%d, mensagem=%s, time=%s]", id, mensagem, time);
+	}
 }

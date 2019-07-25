@@ -1,4 +1,4 @@
-package com.example.bo;
+package com.ufabc.sistemasdistribuidos.bo;
 
 import java.util.Date;
 import java.util.List;
@@ -15,9 +15,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.example.client.UdpIntegrationClient;
-import com.example.dto.global.Instancia;
-import com.example.repository.global.InstanciaRepository;
+import com.ufabc.sistemasdistribuidos.client.UdpIntegrationClient;
+import com.ufabc.sistemasdistribuidos.dto.global.Instancia;
+import com.ufabc.sistemasdistribuidos.repository.global.InstanciaRepository;
 
 @EnableScheduling
 @Component
