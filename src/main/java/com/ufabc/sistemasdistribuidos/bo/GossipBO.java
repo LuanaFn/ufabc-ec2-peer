@@ -2,6 +2,7 @@ package com.ufabc.sistemasdistribuidos.bo;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,15 +12,21 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.integration.ip.udp.UnicastSendingMessageHandler;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ufabc.sistemasdistribuidos.client.UdpIntegrationClient;
+import com.ufabc.sistemasdistribuidos.dto.global.Instancia;
 import com.ufabc.sistemasdistribuidos.dto.local.Estado;
 import com.ufabc.sistemasdistribuidos.dto.local.FileDTO;
 import com.ufabc.sistemasdistribuidos.repository.local.EstadoRepository;
@@ -92,50 +99,35 @@ public class GossipBO {
 		return files;
 	}
 
-//	/**
-//	 * Gera uma nova palavra de 10 digitos e seta como estado
-//	 */
-//	@Scheduled(fixedDelay = SEGUNDO * 30)
-//	@Transactional("localTransactionManager")
-//	public void startGossip() {
-//		String palavra = RandomStringUtils.randomAlphabetic(10);
-//
-//		Estado estado = repo.findById(1l).get();
-//		estado.setMensagem(palavra);
-//		estado.setTime(new Date());
-//		
-//		log.info("Iniciando novo gossip com "+palavra);
-//
-//		repo.save(estado);
-//	}
-//
-//	/**
-//	 * Transmite estado atual
-//	 */
-//	@Scheduled(fixedDelay = SEGUNDO * 3)
-//	@Transactional("localTransactionManager")
-//	public void transmiteEstado() {
-//
-//		try {
-//			Instancia d = bd.getRandomDyno();
-//
-//			UnicastSendingMessageHandler unicastSendingMessageHandler;
-//			
-//			String host = InetAddress.getByName(d.getHost()).getHostAddress();
-//
-//			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
-//					host, d.getPort());
-//
-//			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
-//
-//			udp.sendMessage(repo.findById(1l).get().getMensagem());
-//			
-//			
-//		} catch (UnknownHostException e) {
-//			log.error("Erro ao transmitir mensagem.", e);
-//		}
-//		
-//	}
+
+	/**
+	 * Transmite estado atual
+	 */
+	@Scheduled(fixedDelay = SEGUNDO * 3)
+	@Transactional("localTransactionManager")
+	public void transmiteEstado() {
+
+		try {
+			Instancia d = bd.getRandomDyno();
+
+			UnicastSendingMessageHandler unicastSendingMessageHandler;
+			
+			String host = InetAddress.getByName(d.getHost()).getHostAddress();
+
+			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
+					host, d.getPort());
+
+			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
+			
+			ObjectMapper obj = new ObjectMapper(); 
+			udp.sendMessage(obj.writeValueAsString(repo.findById(1l)));
+			
+			
+		} catch (Exception e) {
+			log.error("Erro ao transmitir mensagem.", e);
+		}
+		
+	}
 //	
 //	@Transactional("localTransactionManager")
 //	public void atualizaEstado(String mensagem) {
