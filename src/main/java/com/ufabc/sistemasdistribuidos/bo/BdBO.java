@@ -9,7 +9,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -20,10 +22,12 @@ import com.ufabc.sistemasdistribuidos.dto.global.Instancia;
 import com.ufabc.sistemasdistribuidos.repository.global.InstanciaRepository;
 
 @EnableScheduling
+@EnableJpaRepositories(basePackages = "com.ufabc.sistemasdistribuidos.repository.global", entityManagerFactoryRef = "globalEntityManager", transactionManagerRef = "globalTransactionManager")
+@ComponentScan("com.ufabc.sistemasdistribuidos.dto.local")
 @Component
 public class BdBO {
 
-	private final static Logger log = LoggerFactory.getLogger(UdpIntegrationClient.class);
+	private final static Logger log = LoggerFactory.getLogger(BdBO.class);
 
 	private final long SEGUNDO = 1000;
 	private final long MINUTO = SEGUNDO * 60;
@@ -59,45 +63,60 @@ public class BdBO {
 
 		return d;
 	}
+	
+	/**
+	 * Retorna a instância salva no BD que representa o atual container
+	 * ou retorna uma nova instancia se ainda não existir
+	 * @return
+	 */
+	public Instancia getMe() {
+		List<Instancia> is = repo.findByHostAndPort(apphost, Integer.valueOf(udpPort));
+		
+		if(is.size() > 0) {
+			log.info("Eu já estava presente no BD!");
+			return is.get(0);
+		}
+		else {
+			Instancia c = new Instancia();
+			c.setHost(apphost);
+			c.setPort(Integer.valueOf(udpPort));
+			
+			log.info("Eu ainda não estava listado no BD :(");
+			
+			return c;
+		}
+	}
 
 	@PostConstruct
 	@Transactional("globalTransactionManager")
 	public void inicializa() {
 
-		List<Instancia> me = repo.findByHost(apphost);
-
-		Instancia c;
-
-		if (me.size() > 0) {
-			c = me.get(0);
-		} else {
-			c = new Instancia();
-			c.setHost(apphost);
-			c.setPort(Integer.valueOf(udpPort));
-			c.setTime(new Date());
-		}
+		Instancia c = getMe();
+		c.setTime(new Date());
 
 		// adiciona o registro
 		repo.save(c);
 
-		log.debug("Informações sobre a instancia foram salvas");
+		log.info("Informações sobre a instancia foram atualizadas");
 	}
 
 	@Transactional("globalTransactionManager")
 	@Scheduled(fixedDelay = SEGUNDO * 10)
 	public void removeInstanciasInativas() {
-		log.debug("Iniciando limpeza do BD de instancias");
+		log.info("Iniciando limpeza do BD de instancias");
 
 		// atualiza a instancia
 		inicializa();
 
-		// carrega a data de hoje, uma hora artas
-		Date lastCheck = new Date(System.currentTimeMillis() - HORA);
+		// carrega a data de hoje, 10 min atras
+		Date lastCheck = new Date(System.currentTimeMillis() - (10*MINUTO));
 
 		// verifica quais instancias estão inativa a uma hora
 		List<Instancia> inativos = repo.findInactives(lastCheck);
 
 		// exclui os inativos
 		repo.deleteAll(inativos);
+		
+		log.info(inativos.size()+" instâncias foram excluídas.");
 	}
 }

@@ -15,7 +15,7 @@ public class Instancia {
 	private Long id;
 	int port;
 	String host;
-	private Date time;
+	Date time;
 	
 	public Long getId() {
 		return id;

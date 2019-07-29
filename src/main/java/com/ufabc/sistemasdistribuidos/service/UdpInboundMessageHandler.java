@@ -27,6 +27,6 @@ public class UdpInboundMessageHandler {
 		LOGGER.info("Received UDP message: {}", mensagem);
 		
 		//atualiza o estado da máquina
-		bo.atualizaEstado(mensagem);
+		//bo.atualizaEstado(mensagem);
 	}
 }

@@ -1,11 +1,14 @@
 package com.ufabc.sistemasdistribuidos.dto.local;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 @Entity
 public class Estado {
@@ -13,23 +16,25 @@ public class Estado {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	private String mensagem;
+	@OneToMany(targetEntity=File.class, mappedBy="name", fetch=FetchType.EAGER)
+	private List<File> files;
+	
 	private Date time;
 	
+	public List<File> getFiles() {
+		return files;
+	}
+
+	public void setFiles(List<File> files) {
+		this.files = files;
+	}
+
 	public Long getId() {
 		return id;
 	}
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getMensagem() {
-		return mensagem;
-	}
-
-	public void setMensagem(String mensagem) {
-		this.mensagem = mensagem;
 	}
 
 	public Date getTime() {
@@ -42,6 +47,6 @@ public class Estado {
 
 	@Override
 	public String toString() {
-		return String.format("Estado[id=%d, mensagem=%s, time=%s]", id, mensagem, time);
+		return String.format("Estado[id=%d, time=%s]", id, time);
 	}
 }
