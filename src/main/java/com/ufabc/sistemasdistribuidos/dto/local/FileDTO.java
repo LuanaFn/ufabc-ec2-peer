@@ -5,12 +5,12 @@ import javax.persistence.Id;
 import javax.persistence.Transient;
 
 @Entity
-public class File {
+public class FileDTO {
 	@Id
 	String name;
 	
 	@Transient
-	String conteudo;
+	String url;
 	
 	public String getName() {
 		return name;
@@ -18,11 +18,11 @@ public class File {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public String getConteudo() {
-		return conteudo;
+	public String getUrl() {
+		return url;
 	}
-	public void setConteudo(String conteudo) {
-		this.conteudo = conteudo;
+	public void setUrl(String conteudo) {
+		this.url = conteudo;
 	}
 	
 	

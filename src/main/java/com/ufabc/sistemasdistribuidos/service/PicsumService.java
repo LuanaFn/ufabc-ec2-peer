@@ -5,12 +5,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
-import com.ufabc.sistemasdistribuidos.dto.local.File;
+import com.ufabc.sistemasdistribuidos.dto.local.FileDTO;
 
 @Service
 public class PicsumService {
@@ -26,22 +24,18 @@ public class PicsumService {
 	 * @return lista de arquivos com apenas o conteudo preenchido
 	 * @throws IOException
 	 */
-	public List<File> loadImages() throws IOException {
+	public List<FileDTO> loadImages() throws IOException {
 
-		List<File> files = new ArrayList<File>();
+		List<FileDTO> files = new ArrayList<FileDTO>();
 		JSONArray resp = new JSONArray(Reader.read(urlpath.concat(listRoute)));
 
 		for(int i=0; i< resp.length(); i++) {
-			File f = new File();
-			f.setConteudo(getConteudoImagem(resp.getJSONObject(i)));
+			FileDTO f = new FileDTO();
+			f.setUrl(resp.getJSONObject(i).getString("download_url").concat(".jpg"));
 			
 			files.add(f);
 		}
 		
 		return files;
-	}
-	
-	private String getConteudoImagem(JSONObject json) throws JSONException, IOException {
-		return Reader.read(json.getString("download_url").concat(".jpg"));
 	}
 }

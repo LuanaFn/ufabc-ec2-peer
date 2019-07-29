@@ -1,14 +1,15 @@
 package com.ufabc.sistemasdistribuidos.bo;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
+import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -20,7 +21,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ufabc.sistemasdistribuidos.dto.local.Estado;
-import com.ufabc.sistemasdistribuidos.dto.local.File;
+import com.ufabc.sistemasdistribuidos.dto.local.FileDTO;
 import com.ufabc.sistemasdistribuidos.repository.local.EstadoRepository;
 import com.ufabc.sistemasdistribuidos.service.PicsumService;
 
@@ -70,8 +71,8 @@ public class GossipBO {
 		}
 	}
 
-	private List<File> getNewFiles() {
-		List<File> files = new ArrayList<File>();
+	private List<FileDTO> getNewFiles() {
+		List<FileDTO> files = new ArrayList<FileDTO>();
 
 		try {
 			files = picsum.loadImages();
@@ -79,14 +80,10 @@ public class GossipBO {
 			// para cada arquivo recuperado, salva uma cópia localmente e atualiza o nome
 			for (int i = 0; i < files.size(); i++) {
 				String fileName = RandomStringUtils.randomAlphabetic(10).concat(".jpg");
-
-				BufferedWriter writer = new BufferedWriter(new FileWriter("arquivos/".concat(fileName)));
-				writer.write(files.get(i).getConteudo());
-
-				writer.close();
+				FileUtils.copyURLToFile(new URL(files.get(i).getUrl()), new File("arquivos/".concat(fileName)));
 
 				files.get(i).setName(fileName);
-				log.info("Novo arquivo gerado: "+fileName);
+				log.info("Novo arquivo gerado: " + fileName);
 			}
 		} catch (IOException e) {
 			log.error("Erro ao carregar novas imagens", e);

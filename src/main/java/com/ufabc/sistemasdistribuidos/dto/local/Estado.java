@@ -16,16 +16,16 @@ public class Estado {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@OneToMany(targetEntity=File.class, mappedBy="name", fetch=FetchType.EAGER)
-	private List<File> files;
+	@OneToMany(targetEntity=FileDTO.class, mappedBy="name", fetch=FetchType.EAGER)
+	private List<FileDTO> files;
 	
 	private Date time;
 	
-	public List<File> getFiles() {
+	public List<FileDTO> getFiles() {
 		return files;
 	}
 
-	public void setFiles(List<File> files) {
+	public void setFiles(List<FileDTO> files) {
 		this.files = files;
 	}
 
