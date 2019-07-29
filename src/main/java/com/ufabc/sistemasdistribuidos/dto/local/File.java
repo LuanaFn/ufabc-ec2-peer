@@ -10,7 +10,7 @@ public class File {
 	String name;
 	
 	@Transient
-	byte[] conteudo;
+	String conteudo;
 	
 	public String getName() {
 		return name;
@@ -18,10 +18,10 @@ public class File {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public byte[] getConteudo() {
+	public String getConteudo() {
 		return conteudo;
 	}
-	public void setConteudo(byte[] conteudo) {
+	public void setConteudo(String conteudo) {
 		this.conteudo = conteudo;
 	}
 	

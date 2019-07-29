@@ -41,7 +41,7 @@ public class PicsumService {
 		return files;
 	}
 	
-	private byte[] getConteudoImagem(JSONObject json) throws JSONException, IOException {
-		return Reader.read(json.getString("url")).getBytes();
+	private String getConteudoImagem(JSONObject json) throws JSONException, IOException {
+		return Reader.read(json.getString("download_url").concat(".jpg"));
 	}
 }

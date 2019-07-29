@@ -1,5 +1,7 @@
 package com.ufabc.sistemasdistribuidos.bo;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -7,6 +9,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,13 +36,12 @@ public class GossipBO {
 	private final long SEGUNDO = 1000;
 	private final long MINUTO = SEGUNDO * 60;
 	private final long HORA = MINUTO * 60;
-	
+
 	private final static Logger log = LoggerFactory.getLogger(GossipBO.class);
-	
 
 	@Autowired
 	BdBO bd;
-	
+
 	@Autowired
 	PicsumService picsum;
 
@@ -67,16 +69,29 @@ public class GossipBO {
 			repo.flush();
 		}
 	}
-	
-	private List<File> getNewFiles(){
+
+	private List<File> getNewFiles() {
 		List<File> files = new ArrayList<File>();
-		
+
 		try {
 			files = picsum.loadImages();
+
+			// para cada arquivo recuperado, salva uma cópia localmente e atualiza o nome
+			for (int i = 0; i < files.size(); i++) {
+				String fileName = RandomStringUtils.randomAlphabetic(10).concat(".jpg");
+
+				BufferedWriter writer = new BufferedWriter(new FileWriter("arquivos/".concat(fileName)));
+				writer.write(files.get(i).getConteudo());
+
+				writer.close();
+
+				files.get(i).setName(fileName);
+				log.info("Novo arquivo gerado: "+fileName);
+			}
 		} catch (IOException e) {
 			log.error("Erro ao carregar novas imagens", e);
 		}
-		
+
 		return files;
 	}
 
