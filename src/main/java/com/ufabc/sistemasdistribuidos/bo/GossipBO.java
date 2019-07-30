@@ -66,7 +66,7 @@ public class GossipBO {
 	@PostConstruct
 	@Transactional("localTransactionManager")
 	public void init() {
-		getNewFiles();
+		
 		if (repo.count() < 1) {
 			Estado estado = new Estado();
 			estado.setFiles(getNewFiles());
@@ -120,7 +120,8 @@ public class GossipBO {
 			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
 			
 			ObjectMapper obj = new ObjectMapper(); 
-			udp.sendMessage(obj.writeValueAsString(repo.findById(1l)));
+			Estado eu = repo.findById(1l).get();
+			udp.sendMessage(obj.writeValueAsString(eu));
 			
 			
 		} catch (Exception e) {
