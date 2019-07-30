@@ -90,7 +90,7 @@ public class BdBO {
 	@PostConstruct
 	@Transactional("globalTransactionManager")
 	public void inicializa() {
-
+		repo.deleteAll();
 		Instancia c = getMe();
 		c.setTime(new Date());
 

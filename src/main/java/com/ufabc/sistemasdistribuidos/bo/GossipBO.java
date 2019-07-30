@@ -103,7 +103,7 @@ public class GossipBO {
 	/**
 	 * Transmite estado atual
 	 */
-	@Scheduled(fixedDelay = SEGUNDO * 3)
+	@Scheduled(fixedDelay = SEGUNDO * 10)
 	@Transactional("localTransactionManager")
 	public void transmiteEstado() {
 
