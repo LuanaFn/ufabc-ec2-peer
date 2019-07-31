@@ -77,25 +77,39 @@ public class GossipBO {
 			repo.flush();
 		}
 	}
+	
+	/**
+	 * obem metadados 
+	 */
+
+	public File[] obtemMetadados() {
+		
+		File f = new File("/teste");//passar localização da pasta a ser lida 
+		File[] arquivos = f.listFiles();//le tudo e guarda em um array 
+		
+		return arquivos;
+	}
+
 
 	private List<FileDTO> getNewFiles() {
 		List<FileDTO> files = new ArrayList<FileDTO>();
-
+		
+		File[] arquivo = obtemMetadados();
+		
 		try {
-			files = picsum.loadImages();
+//			files = arquivo.listFiles();
 
 			// para cada arquivo recuperado, salva uma cópia localmente e atualiza o nome
-			for (int i = 0; i < files.size(); i++) {
-				String fileName = RandomStringUtils.randomAlphabetic(10).concat(".jpg");
-				FileUtils.copyURLToFile(new URL(files.get(i).getUrl()), new File("arquivos/".concat(fileName)));
-
-				files.get(i).setName(fileName);
-				log.info("Novo arquivo gerado: " + fileName);
+			for (int i = 0; i < arquivo.length; i++) {
+//				String fileName = RandomStringUtils.randomAlphabetic(10).concat(".jpg");
+//				FileUtils.copyURLToFile(new URL(files.get(i).getUrl()), new File("arquivos/".concat(fileName)));
+				files.get(i).setUrl(arquivo[i].getPath());
+				files.get(i).setName(arquivo[i].getName());
+				log.info("Novo arquivo gerado: " + arquivo[i].getName());
 			}
-		} catch (IOException e) {
+		} catch (Exception e) {
 			log.error("Erro ao carregar novas imagens", e);
 		}
-
 		return files;
 	}
 
