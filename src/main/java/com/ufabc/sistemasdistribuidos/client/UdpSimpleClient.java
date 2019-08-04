@@ -18,8 +18,11 @@ public class UdpSimpleClient implements UdpClient{
 	private Integer port;
 	
 	public void sendMessage(String message) {
-		LOGGER.info("Sending UDP message: {}", message);
+		
 		InetSocketAddress sock = new InetSocketAddress("localhost",port);
+		
+		LOGGER.info("Sending simple UDP message: {} para host = " + sock.getHostName() + " e porta = "
+				+ sock.getPort(), message);
 
 		byte[] udpMessage = message.getBytes();
 		DatagramPacket packet = null;

@@ -20,7 +20,7 @@ public class UdpIntegrationClient implements UdpClient {
 	}
 
 	public void sendMessage(String message) {
-		LOGGER.info("Enviando UDP: {} para host = " + udpSendingAdapter.getHost() + " e porta = "
+		LOGGER.info("Enviando UDP integrado: {} para host = " + udpSendingAdapter.getHost() + " e porta = "
 				+ udpSendingAdapter.getPort(), message);
 		udpSendingAdapter.handleMessage(MessageBuilder.withPayload(message).build());
 		
