@@ -86,7 +86,7 @@ public class GossipBO {
 		
 		File f = new File("/teste");//passar localização da pasta a ser lida 
 		File[] arquivos = f.listFiles();//le tudo e guarda em um array 
-		
+			
 		return arquivos;
 	}
 
@@ -95,7 +95,7 @@ public class GossipBO {
 		List<FileDTO> files = new ArrayList<FileDTO>();
 		
 		File[] arquivo = obtemMetadados();
-		
+			
 		try {
 //			files = arquivo.listFiles();
 
@@ -122,6 +122,7 @@ public class GossipBO {
 	public void transmiteEstado() {
 
 		try {
+			
 			Instancia d = bd.getRandomDyno();
 
 			UnicastSendingMessageHandler unicastSendingMessageHandler;
@@ -134,8 +135,12 @@ public class GossipBO {
 			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
 			
 			ObjectMapper obj = new ObjectMapper(); 
-			Estado eu = repo.findById(1l).get();
-			udp.sendMessage(obj.writeValueAsString(eu));
+			for (long i = 1; i <10 ; i++) {		
+			Estado eu = repo.findById(i).get();
+			if(eu!= null) {
+				udp.sendMessage(obj.writeValueAsString(eu));				
+			}
+			}
 			
 			
 		} catch (Exception e) {
@@ -143,6 +148,35 @@ public class GossipBO {
 		}
 		
 	}
+//	/**
+//	 * Transmite estado atual 
+//	 */
+//	@Scheduled(fixedDelay = SEGUNDO * 10)
+//	@Transactional("localTransactionManager")
+//	public void transmiteEstado() {
+//
+//		try {
+//			Instancia d = bd.getRandomDyno();
+//
+//			UnicastSendingMessageHandler unicastSendingMessageHandler;
+//			
+//			String host = InetAddress.getByName(d.getHost()).getHostAddress();
+//
+//			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
+//					host, d.getPort());
+//
+//			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
+//			
+//			ObjectMapper obj = new ObjectMapper(); 
+//			Estado eu = repo.findById(1l).get();
+//			udp.sendMessage(obj.writeValueAsString(eu));
+//			
+//			
+//		} catch (Exception e) {
+//			log.error("Erro ao transmitir mensagem.", e);
+//		}
+//		
+//	}
 //	
 //	@Transactional("localTransactionManager")
 //	public void atualizaEstado(String mensagem) {
