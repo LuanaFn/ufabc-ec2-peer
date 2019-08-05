@@ -66,10 +66,10 @@ public class GossipBO {
 	@PostConstruct
 	@Transactional("localTransactionManager")
 	public void init() {
-		
+
 		if (repo.count() < 1) {
 			getNewFiles();
-			
+
 			Estado estado = new Estado();
 			estado.setFiles(obtemMetadados(estado));
 			estado.setTime(new Date());
@@ -79,35 +79,33 @@ public class GossipBO {
 			repo.flush();
 		}
 	}
-	
+
 	/**
-	 * obem metadados 
+	 * obem metadados
 	 */
 
 	public List<FileDTO> obtemMetadados(Estado estado) {
-		
-		List<FileDTO> files = new ArrayList<FileDTO>();
-		
-		File f = new File("arquivos");//passar localização da pasta a ser lida 
-		File[] arquivos = f.listFiles();//le tudo e guarda em um array 
 
-		if(arquivos != null)
-		{
-			for(int i =0; i < arquivos.length; i++) {
+		List<FileDTO> files = new ArrayList<FileDTO>();
+
+		File f = new File("arquivos");// passar localização da pasta a ser lida
+		File[] arquivos = f.listFiles();// le tudo e guarda em um array
+
+		if (arquivos != null) {
+			for (int i = 0; i < arquivos.length; i++) {
 				FileDTO file = new FileDTO();
 				file.setName(arquivos[i].getName());
 				file.setEstado(estado);
 				files.add(file);
 			}
 		}
-		
+
 		return files;
 	}
 
-
 	private List<FileDTO> getNewFiles() {
 		List<FileDTO> files = new ArrayList<FileDTO>();
-			
+
 		try {
 			files = picsum.loadImages();
 
@@ -125,7 +123,6 @@ public class GossipBO {
 		return files;
 	}
 
-
 	/**
 	 * Transmite estado atual
 	 */
@@ -134,31 +131,29 @@ public class GossipBO {
 	public void transmiteEstado() {
 
 		try {
-			
+
 			Instancia d = bd.getRandomDyno();
 
 			UnicastSendingMessageHandler unicastSendingMessageHandler;
-			
+
 			String host = InetAddress.getByName(d.getHost()).getHostAddress();
 
-			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
-					host, d.getPort());
+			unicastSendingMessageHandler = new UnicastSendingMessageHandler(host, d.getPort());
 
 			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
-			
-			ObjectMapper obj = new ObjectMapper(); 
-			for (long i = 1; i <10 ; i++) {		
-			Estado eu = repo.findById(i).get();
-			if(eu!= null) {
-				udp.sendMessage(obj.writeValueAsString(eu));				
+
+			ObjectMapper obj = new ObjectMapper();
+			for (long i = 1; i < 10; i++) {
+				Estado eu = repo.findById(i).get();
+				if (eu != null) {
+					udp.sendMessage(obj.writeValueAsString(eu));
+				}
 			}
-			}
-			
-			
+
 		} catch (Exception e) {
 			log.error("Erro ao transmitir mensagem.", e);
 		}
-		
+
 	}
 //	/**
 //	 * Transmite estado atual 

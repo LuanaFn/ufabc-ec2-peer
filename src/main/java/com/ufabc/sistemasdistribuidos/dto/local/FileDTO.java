@@ -7,6 +7,8 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class FileDTO {
 	
@@ -14,6 +16,7 @@ public class FileDTO {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
+	@JsonBackReference
 	@ManyToOne
 	Estado estado;
 	

@@ -11,12 +11,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Entity
 public class Estado {
 	@Id
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
+	@JsonManagedReference
 	@OneToMany(targetEntity=FileDTO.class, mappedBy = "estado", fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<FileDTO> files;
 	
