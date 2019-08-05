@@ -3,6 +3,7 @@ package com.ufabc.sistemasdistribuidos.dto.local;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -16,7 +17,7 @@ public class Estado {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@OneToMany(targetEntity=FileDTO.class, mappedBy="name", fetch=FetchType.EAGER)
+	@OneToMany(targetEntity=FileDTO.class, mappedBy = "estado", fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<FileDTO> files;
 	
 	private Date time;

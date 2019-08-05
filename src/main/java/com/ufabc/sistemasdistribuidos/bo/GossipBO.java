@@ -68,8 +68,10 @@ public class GossipBO {
 	public void init() {
 		
 		if (repo.count() < 1) {
+			getNewFiles();
+			
 			Estado estado = new Estado();
-			estado.setFiles(getNewFiles());
+			estado.setFiles(obtemMetadados(estado));
 			estado.setTime(new Date());
 
 			log.info("Salvando minhas informações: " + repo.save(estado).toString());
@@ -82,30 +84,40 @@ public class GossipBO {
 	 * obem metadados 
 	 */
 
-	public File[] obtemMetadados() {
+	public List<FileDTO> obtemMetadados(Estado estado) {
 		
-		File f = new File("/teste");//passar localização da pasta a ser lida 
+		List<FileDTO> files = new ArrayList<FileDTO>();
+		
+		File f = new File("arquivos");//passar localização da pasta a ser lida 
 		File[] arquivos = f.listFiles();//le tudo e guarda em um array 
 		
-		return arquivos;
+		if(arquivos != null)
+		{
+			for(int i =0; i < arquivos.length; i++) {
+				FileDTO file = new FileDTO();
+				file.setName(arquivos[i].getName());
+				file.setEstado(estado);
+				files.add(file);
+			}
+		}
+		
+		return files;
 	}
 
 
 	private List<FileDTO> getNewFiles() {
 		List<FileDTO> files = new ArrayList<FileDTO>();
-		
-		File[] arquivo = obtemMetadados();
-		
+			
 		try {
-//			files = arquivo.listFiles();
+			files = picsum.loadImages();
 
 			// para cada arquivo recuperado, salva uma cópia localmente e atualiza o nome
-			for (int i = 0; i < arquivo.length; i++) {
-//				String fileName = RandomStringUtils.randomAlphabetic(10).concat(".jpg");
-//				FileUtils.copyURLToFile(new URL(files.get(i).getUrl()), new File("arquivos/".concat(fileName)));
-				files.get(i).setUrl(arquivo[i].getPath());
-				files.get(i).setName(arquivo[i].getName());
-				log.info("Novo arquivo gerado: " + arquivo[i].getName());
+			for (int i = 0; i < files.size(); i++) {
+				String fileName = RandomStringUtils.randomAlphabetic(10).concat(".jpg");
+				FileUtils.copyURLToFile(new URL(files.get(i).getUrl()), new File("arquivos/".concat(fileName)));
+
+				files.get(i).setName(fileName);
+				log.info("Novo arquivo gerado: " + files.get(i).getName());
 			}
 		} catch (Exception e) {
 			log.error("Erro ao carregar novas imagens", e);
