@@ -12,7 +12,7 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.json.JSONObject;
+import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +30,7 @@ import com.ufabc.sistemasdistribuidos.dto.global.Instancia;
 import com.ufabc.sistemasdistribuidos.dto.local.Estado;
 import com.ufabc.sistemasdistribuidos.dto.local.FileDTO;
 import com.ufabc.sistemasdistribuidos.repository.local.EstadoRepository;
+import com.ufabc.sistemasdistribuidos.repository.local.FileRepository;
 import com.ufabc.sistemasdistribuidos.service.PicsumService;
 
 @EnableScheduling
@@ -40,6 +41,9 @@ public class GossipBO {
 
 	@Autowired
 	private EstadoRepository repo;
+
+	@Autowired
+	private FileRepository repoFile;
 
 	private final long SEGUNDO = 1000;
 	private final long MINUTO = SEGUNDO * 60;
@@ -138,16 +142,19 @@ public class GossipBO {
 
 			String host = InetAddress.getByName(d.getHost()).getHostAddress();
 
-			unicastSendingMessageHandler = new UnicastSendingMessageHandler(host, d.getPort());
+			unicastSendingMessageHandler = new UnicastSendingMessageHandler(host, d.getPort(), true);
 
 			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
 
 			ObjectMapper obj = new ObjectMapper();
-			for (long i = 1; i < 10; i++) {
-				Estado eu = repo.findById(i).get();
-				if (eu != null) {
-					udp.sendMessage(obj.writeValueAsString(eu));
-				}
+			List<Estado> estados = repo.findAll();
+
+			// envia cada estado
+			for (Estado estado : estados) {
+				List<FileDTO> files = estado.getFiles();
+				
+				for (FileDTO file : files)
+					udp.sendMessage(obj.writeValueAsString(file));
 			}
 
 		} catch (Exception e) {
@@ -155,47 +162,24 @@ public class GossipBO {
 		}
 
 	}
-//	/**
-//	 * Transmite estado atual 
-//	 */
-//	@Scheduled(fixedDelay = SEGUNDO * 10)
-//	@Transactional("localTransactionManager")
-//	public void transmiteEstado() {
-//
-//		try {
-//			Instancia d = bd.getRandomDyno();
-//
-//			UnicastSendingMessageHandler unicastSendingMessageHandler;
-//			
-//			String host = InetAddress.getByName(d.getHost()).getHostAddress();
-//
-//			unicastSendingMessageHandler = new UnicastSendingMessageHandler(
-//					host, d.getPort());
-//
-//			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
-//			
-//			ObjectMapper obj = new ObjectMapper(); 
-//			Estado eu = repo.findById(1l).get();
-//			udp.sendMessage(obj.writeValueAsString(eu));
-//			
-//			
-//		} catch (Exception e) {
-//			log.error("Erro ao transmitir mensagem.", e);
-//		}
-//		
-//	}
-//	
-//	@Transactional("localTransactionManager")
-//	public void atualizaEstado(String mensagem) {
-//		Estado estado = repo.findAll().get(0);
-//		
-//		estado.setMensagem(mensagem);
-//		estado.setTime(new Date());
-//		
-//		repo.save(estado);
-//		
-//		log.info("Atualizando meu estado: "+estado.toString());
-//		
-//		repo.flush();
-//	}
+
+	/**
+	 * Recebe um JSON com uma lista de estados a serem atualizados e os atualiza
+	 * 
+	 * @param mensagem
+	 */
+	@Transactional("localTransactionManager")
+	public void atualizaEstado(String mensagem) {
+
+		try {
+			ObjectMapper mapper = new ObjectMapper();
+			FileDTO file = mapper.readValue(mensagem, FileDTO.class);
+
+			repoFile.save(file);
+
+			log.info("Estados internos atualizados.");
+		} catch (IOException e) {
+			log.error("Erro ao ler JSON de estados.", e);
+		}
+	}
 }
