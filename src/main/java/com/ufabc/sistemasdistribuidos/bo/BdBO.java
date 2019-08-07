@@ -101,7 +101,7 @@ public class BdBO {
 	}
 
 	@Transactional("globalTransactionManager")
-	@Scheduled(fixedDelay = SEGUNDO * 10)
+	@Scheduled(fixedDelay = MINUTO * 10)
 	public void removeInstanciasInativas() {
 		log.info("Iniciando limpeza do BD de instancias");
 
