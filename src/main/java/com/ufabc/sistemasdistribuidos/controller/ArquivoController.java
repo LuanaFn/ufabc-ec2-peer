@@ -19,8 +19,9 @@ public class ArquivoController {
 	@RequestMapping(method = RequestMethod.GET)    
 	public byte[] download(String name) throws IOException {
 		//TODO colocar a função de busca quando implementada para receber apenas o nome do arquivo 
-		String path = "C:\\\\teste\\data.txt";
+		String path = "C:\\\\teste\\"+name;
 		Arquivo file = new Arquivo();
+		file.setNome(name);
 		file.setConteudo(path);
 
 	    

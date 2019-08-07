@@ -13,12 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/download")
 public class DownloadController {
 	@RequestMapping(method = RequestMethod.GET)    
-	public void download() throws IOException {
+	public void download(String name) throws IOException {
         
         ArquivoController get = new ArquivoController();
         
-		FileOutputStream fos = new FileOutputStream("C:\\\\teste\\data2.txt");
-		fos.write(get.download("lala"));
+		FileOutputStream fos = new FileOutputStream("C:\\\\teste\\copia\\"+name);
+		fos.write(get.download(name));
 		fos.close();
 	}
 
