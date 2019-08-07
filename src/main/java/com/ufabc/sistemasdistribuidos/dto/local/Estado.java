@@ -16,16 +16,20 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Entity
 public class Estado {
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
-	
-	//@JsonBackReference
+
+	// @JsonBackReference
 	@JsonIgnore
-	@OneToMany(targetEntity=FileDTO.class, mappedBy = "estado", fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@OneToMany(targetEntity = FileDTO.class, mappedBy = "estado", fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<FileDTO> files;
-	
+
+	private String host;
+
+	private int port;
+
 	private Date time;
-	
+
 	public List<FileDTO> getFiles() {
 		return files;
 	}
@@ -48,6 +52,22 @@ public class Estado {
 
 	public void setTime(Date time) {
 		this.time = time;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public void setHost(String host) {
+		this.host = host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public void setPort(int port) {
+		this.port = port;
 	}
 
 	@Override

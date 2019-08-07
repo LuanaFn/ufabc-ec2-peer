@@ -16,6 +16,7 @@ import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.integration.ip.udp.UnicastSendingMessageHandler;
@@ -56,6 +57,12 @@ public class GossipBO {
 
 	@Autowired
 	PicsumService picsum;
+	
+	@Value("${udp.port}")
+	private Integer udpPort;
+
+	@Value("${app.host}")
+	private String apphost;
 
 	@Autowired
 	public GossipBO() {
@@ -77,6 +84,8 @@ public class GossipBO {
 			Estado estado = new Estado();
 			estado.setFiles(obtemMetadados(estado));
 			estado.setTime(new Date());
+			estado.setHost(apphost);
+			estado.setPort(udpPort);
 
 			log.info("Salvando minhas informações: " + repo.save(estado).toString());
 
