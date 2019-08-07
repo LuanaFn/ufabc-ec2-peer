@@ -11,7 +11,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public class Estado {
@@ -19,7 +19,8 @@ public class Estado {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@JsonBackReference
+	//@JsonBackReference
+	@JsonIgnore
 	@OneToMany(targetEntity=FileDTO.class, mappedBy = "estado", fetch=FetchType.EAGER, cascade = CascadeType.PERSIST)
 	private List<FileDTO> files;
 	

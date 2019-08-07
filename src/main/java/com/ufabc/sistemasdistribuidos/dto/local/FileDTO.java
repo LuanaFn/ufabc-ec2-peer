@@ -19,7 +19,7 @@ public class FileDTO {
 	@GeneratedValue(strategy=GenerationType.AUTO)
 	private Long id;
 	
-	@JsonManagedReference
+	//@JsonManagedReference
 	@ManyToOne
 	Estado estado;
 	

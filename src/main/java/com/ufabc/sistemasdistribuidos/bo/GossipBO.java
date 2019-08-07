@@ -142,7 +142,7 @@ public class GossipBO {
 
 			String host = InetAddress.getByName(d.getHost()).getHostAddress();
 
-			unicastSendingMessageHandler = new UnicastSendingMessageHandler(host, d.getPort(), true);
+			unicastSendingMessageHandler = new UnicastSendingMessageHandler(host, d.getPort());
 
 			UdpIntegrationClient udp = new UdpIntegrationClient(unicastSendingMessageHandler);
 
