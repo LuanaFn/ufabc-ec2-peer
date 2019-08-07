@@ -21,12 +21,12 @@ public class EnviaArquivo {
 	    return byteArray.toByteArray();
 	} 
 	
-	public void enviar( Arquivo arquivo){
+	public void enviar(String ip,int porta, Arquivo arquivo){
 		   
 		    try {
 
-		    	Socket socket = new Socket("localhost", 6000);
-		    	
+		    	Socket socket = new Socket( ip , porta);
+		    	//cria um socket e conecta no endereço enviado
 		 
 		        BufferedOutputStream buffer = new BufferedOutputStream(socket.getOutputStream());
 		 
