@@ -14,11 +14,12 @@ import com.ufabc.sistemasdistribuidos.dto.local.Arquivo;
 
 @RestController
 @RequestMapping("/arquivo")
-public class ArquivoControlle {
+public class ArquivoController {
 
 	@RequestMapping(method = RequestMethod.GET)    
-	public HttpEntity<byte[]> download(String path,String name) throws IOException {
-		
+	public byte[] download(String name) throws IOException {
+		//TODO colocar a função de busca quando implementada para receber apenas o nome do arquivo 
+		String path = "C:\\\\teste\\data.txt";
 		Arquivo file = new Arquivo();
 		file.setConteudo(path);
 
@@ -27,8 +28,8 @@ public class ArquivoControlle {
 
 	    httpHeaders.add("Content-Disposition", "attachment;filename=\""+name+"\"");
 
-	    HttpEntity<byte[]> entity = new HttpEntity<byte[]>(file.getConteudo(),httpHeaders);
+//	    HttpEntity<byte[]> entity = new HttpEntity<byte[]>(file.getConteudo(),httpHeaders);
 
-	   return entity;
+	   return file.getConteudo();
 	    }
 }
