@@ -38,3 +38,7 @@ Antes de começar, o programa se conecta com um serviço chamado Picsum que forn
 O estado do peer é informado a cada x segundos a um outro peer aleatório que pode ser ele mesmo na classe GossipBO, função transmiteEstado().
 
 O estado é composto do host e porta para identificar o container, um timer que diz o quao nova é a informação sobre este estado e uma lista de arquivos contendo os caminhos internos para todos os arquivos que aquela instância possui.
+
+### Obtem meta dados
+
+A cada x segundos cada peer escaneia os arquivos presentes em suas pastas e atualizam o estado gravado para condizer com os arquivos existentes.

@@ -12,7 +12,6 @@ import javax.annotation.PostConstruct;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.text.StringEscapeUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,11 +91,51 @@ public class GossipBO {
 			repo.flush();
 		}
 	}
+	
+	/**
+	 * Roda de tempos em tempos
+	 * escaneia a pasta local e compara com o estado
+	 * deixa o estado igual o que está na pasta
+	 */
+	@Scheduled(fixedDelay = SEGUNDO * 5)
+	@Transactional("localTransactionManager")
+	public void salvaMetaDados() {
+		Estado eu = repo.getOne(1l);
+		
+		List<FileDTO> files = obtemMetadados(eu);
+		
+		for(int i = 0; i < files.size(); i++) {
+			final String arq = files.get(i).getName();
+			long n = eu.getFiles().stream().filter(f->f.getName().equals(arq)).count();
+			
+			//se o arquivo ainda não existir no estado, adiciona
+			if(n == 0) {
+				log.info("Adicionando novo arquivo '{}' ao estado", arq);
+				FileDTO f = files.get(i);
+				f.setEstado(eu);
+				repoFile.save(f);
+			}
+		}
+		
+		for(int i =0; i < eu.getFiles().size(); i++) {
+			final String arq = eu.getFiles().get(i).getName();
+			
+			long n = files.stream().filter(f->f.getName().equals(arq)).count();
+			
+			// se algum arquivo do estado não estiver nos metadados é pq foi excluido
+			if(n == 0) {
+				log.info("Removendo arquivo '{}' do estado", eu.getFiles().get(i).getName());
+				
+				repoFile.deleteById(eu.getFiles().get(i).getId());
+				eu.getFiles().remove(i);
+				repo.save(eu);
+			}
+		}
+	}
 
 	/**
 	 * obem metadados
 	 */
-
 	public List<FileDTO> obtemMetadados(Estado estado) {
 
 		List<FileDTO> files = new ArrayList<FileDTO>();
@@ -139,7 +178,7 @@ public class GossipBO {
 	/**
 	 * Transmite estado atual
 	 */
-	@Scheduled(fixedDelay = SEGUNDO * 10)
+	@Scheduled(fixedDelay = SEGUNDO * 30)
 	@Transactional("localTransactionManager")
 	public void transmiteEstado() {
 
