@@ -178,7 +178,7 @@ public class GossipBO {
 	/**
 	 * Transmite estado atual
 	 */
-	@Scheduled(fixedDelay = SEGUNDO * 30)
+	@Scheduled(fixedDelay = MINUTO * 2)
 	@Transactional("localTransactionManager")
 	public void transmiteEstado() {
 
@@ -222,7 +222,23 @@ public class GossipBO {
 		try {
 			ObjectMapper mapper = new ObjectMapper();
 			FileDTO file = mapper.readValue(mensagem, FileDTO.class);
+			Estado estado;
+			List<Estado> es = repo.find(file.getEstado().getHost(), file.getEstado().getPort());
+			
+			// se o estado já não existir cria um novo
+			if(es.size() == 0) {
+				estado = new Estado();
+				estado.setHost(file.getEstado().getHost());
+				estado.setPort(file.getEstado().getPort());
+				estado.setTime(file.getEstado().getTime());
+				
+				estado = repo.save(estado);
+			} else {
+				estado = es.get(0);
+			}
 
+			file.setEstado(estado);
+			
 			repoFile.save(file);
 
 			log.info("Estados internos atualizados.");
